@@ -19,6 +19,8 @@ for i in range(0, length):
     # removing stop words, non-alpabetical tokens and converting to lower case 
     sentences[i] = [word.lower() for word in temp if word not in stopwords and word.isalpha()]    
 
+# size refers to the desired dimensionality of vectors 
+# window is upper bound in dynamic context window
 model = Word2Vec(sentences, size=100, window=5)
 
 # Exploring the model 
