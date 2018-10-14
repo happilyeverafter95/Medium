@@ -25,7 +25,7 @@ def alternative_review_messages(msg):
     # removing stopwords 
     msg = [word for word in msg.split() if word not in stopwords]
 
-    # stemming messages 
+    # uses a lemmatizer
     msg = " ".join([lemmatizer.lemmatize(word) for word in msg])
     return msg
 
