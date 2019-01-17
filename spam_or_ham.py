@@ -1,6 +1,7 @@
 import pandas as pd
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+from nltk import pos_tag, word_tokenize
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import svm
@@ -22,11 +23,17 @@ def alternative_review_messages(msg):
     # converting messages to lowercase
     msg = msg.lower()
 
+    # uses a lemmatizer (wnpos is the parts of speech tag)
+    # unfortunately wordnet and nltk uses a different set of terminology for pos tags
+    # first, we must translate the nltk pos to wordnet
+    nltk_pos = [tag[1] for tag in pos_tag(word_tokenize(msg))]
+    msg = [tag[0] for tag in pos_tag(word_tokenize(msg))]
+    wnpos = ['a' if tag[0] == 'J' else tag[0].lower() if tag[0] in ['N', 'R', 'V'] else 'n' for tag in nltk_pos]
+    msg = " ".join([lemmatizer.lemmatize(word, wnpos[i]) for i, word in enumerate(msg)])
+
     # removing stopwords 
     msg = [word for word in msg.split() if word not in stopwords]
 
-    # uses a lemmatizer
-    msg = " ".join([lemmatizer.lemmatize(word) for word in msg])
     return msg
 
 # Processing text messages
